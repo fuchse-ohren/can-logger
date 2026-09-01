@@ -1,0 +1,23 @@
+<HTML>
+  <head>
+    <title>GPS情報取得ウィンドウ</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="./js/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>GPS情報</h1>
+
+    <!-- GPS取得ログ -->
+    <div id="logwrapper" style="width:100%">
+        <textarea rows="10" id="log" style="width: 100%;font-size: 10px"></textarea>
+    </div>
+    <!-- GPS取得ログ -->
+    <br>
+    <!-- 地図 -->
+    <div id="map" style="width:100%; height: 320px;"></div>
+    <!-- 地図 -->
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./js/gps.js"></script>
+  </body>
+</HTML>
