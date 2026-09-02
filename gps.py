@@ -27,12 +27,13 @@ def ws_client_hello(msg):
     return '{"type": "SERVER_HELLO"}'
 
 
-def ws_gps_update(msg):
+def ws_gps_update(logger,msg):
     '''
     WebSocketのGPS UPDATEメッセージ処理
 
     Parameters
     ----------
+        logger (CanLogger): CanLoggerのインスタンス
         msg (dict): 受信したメッセージ
 
     Returns
@@ -40,6 +41,9 @@ def ws_gps_update(msg):
         str: クライアントへの返信メッセージ
     '''
     print("GPS:", msg)
+    logger.lat = msg["latitude"]
+    logger.long = msg["longitude"]
+    logger.acc = msg["accuracy"]
     return '{"type": "GPS_UPDATE","status": "ok","message": "ok"}'
 
 

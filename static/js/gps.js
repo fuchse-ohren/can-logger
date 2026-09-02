@@ -111,8 +111,7 @@ var wsConnected = false;
 try {
   sock.send('{"type": "CLIENT HELLO"}');
   sock.on("message", function (_data) {
-
-    data = JSON.parse(_data);
+    const data = JSON.parse(_data);
 
     // 各メッセージハンドラに振り分ける
     switch (data.type) {

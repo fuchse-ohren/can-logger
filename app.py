@@ -2,6 +2,7 @@ from flask import Flask
 from flask_socketio import SocketIO
 import json
 import gps
+import can
 
 app = Flask(__name__)
 sock = SocketIO(app)
@@ -27,7 +28,7 @@ def handle_message(_msg):
     if msg["type"] == "CLIENT HELLO":
         res = gps.ws_client_hello(msg)
     if msg["type"] == "GPS UPDATE":
-        res = gps.ws_gps_update(msg)
+        res = gps.ws_gps_update(cl, msg)
 
     if res != None:
         print("socket_send:", res)
@@ -36,4 +37,7 @@ def handle_message(_msg):
 
 if __name__ == '__main__':
     print(app.url_map)
-    app.run(debug=True)
+    cl = can.CanLogger()
+    cl.run()
+    app.run()
+    cl.event.set()
