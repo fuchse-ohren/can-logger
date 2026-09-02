@@ -24,7 +24,7 @@ def ws_client_hello(msg):
     -------
         str: クライアントへの返信メッセージ
     '''
-    return '{"type": "SERVER HELLO"}'
+    return '{"type": "SERVER_HELLO"}'
 
 
 def ws_gps_update(msg):
@@ -40,7 +40,7 @@ def ws_gps_update(msg):
         str: クライアントへの返信メッセージ
     '''
     print("GPS:", msg)
-    return None
+    return '{"type": "GPS_UPDATE","status": "ok","message": "ok"}'
 
 
 if __name__ == '__main__':
@@ -58,9 +58,9 @@ if __name__ == '__main__':
 
         # メッセージタイプごとに分岐
         msg = json.loads(_msg)
-        if msg["type"] == "CLIENT HELLO":
+        if msg["type"] == "CLIENT_HELLO":
             ws_client_hello(msg)
-        if msg["type"] == "GPS UPDATE":
+        if msg["type"] == "GPS_UPDATE":
             ws_gps_update(msg)
 
     app.run(debug=True)

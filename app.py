@@ -30,6 +30,7 @@ def handle_message(_msg):
         res = gps.ws_gps_update(msg)
 
     if res != None:
+        print("socket_send:", res)
         sock.send(res)
 
 

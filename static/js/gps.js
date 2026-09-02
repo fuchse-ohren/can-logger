@@ -13,18 +13,21 @@ function log(level,text) {
   switch (level) {
     case "info":
       prefix = "[INFO]";
+      console.info(`${timestamp} ${prefix} ${text}`);
       break;
     case "warn":
       prefix = "[WARN]";
+      console.warn(`${timestamp} ${prefix} ${text}`);
       break;
     case "error":
       prefix = "[ERROR]";
+      console.error(`${timestamp} ${prefix} ${text}`);
       break;
     default:
-      prefix = "[INFO]";
+      prefix = "[UNKNOWN]";
+      console.log(`${timestamp} ${prefix} ${text}`);
   }
   log.textContent += `${timestamp} ${prefix} ${text}\n`;
-  console.log(`${timestamp} ${prefix} ${text}`);
 }
 
 
@@ -57,7 +60,7 @@ function initError(obj) {
 **/
 function updateSuccess(obj) {
   // ログ出力
-  log("info", "GPS更新\t緯度:" + Math.trunc(obj.coords.latitude * 10000) / 10000 + " 経度:" + Math.trunc(obj.coords.longitude * 10000) / 10000 + " 精度:" + obj.coords.accuracy);
+  log("info", "GPS情報取得\t緯度:" + Math.trunc(obj.coords.latitude * 10000) / 10000 + " 経度:" + Math.trunc(obj.coords.longitude * 10000) / 10000 + " 精度:" + obj.coords.accuracy);
 
   // 地図の中心地を現在地に更新
   map.panTo([obj.coords.latitude, obj.coords.longitude], { animate: true, duration: 2 });
@@ -75,20 +78,53 @@ function updateSuccess(obj) {
   }));
 }
 
+
+/**
+ * HELLOメッセージハンドラ
+ * WebSocketからメッセージを受信した際の処理を記述する
+ * @param {Object} data - 受信したメッセージ
+**/
+function wsHelloHandler(data) {
+  wsConnected = true;
+  log("info", "WebSocket接続成功");
+}
+
+
+/**
+ * GPS_UPDATEメッセージハンドラ
+ * WebSocketからメッセージを受信した際の処理を記述する
+ * @param {Object} data - 受信したメッセージ
+**/
+function wsGpsUpdateHandler(data) {
+  if (wsConnected == false) { location.reload(); };
+  log("info", "GPS情報送信\t" + "状態:" + data.status + " 詳細:" + data.message );
+}
+
+
 /**
  * Websocketを開く
  * ブラウザから取得したGPS座標をバックエンドに報告するために
  * SocketIOを利用してWebSocketを開きバックエンドとの通信状況を確認する．
  **/
 const sock = io();
+var wsConnected = false;
 try {
   sock.send('{"type": "CLIENT HELLO"}');
-  sock.on("message", function (data) {
-    if (data == '{"type": "SERVER HELLO"}') {
-      log("info", "WebSocket接続成功");
-    } else {
-      log("error","WebSocket接続失敗");
-      alert("WebSocket接続に失敗しました．\nページを更新して再度接続を試みてください．");
+  sock.on("message", function (_data) {
+
+    data = JSON.parse(_data);
+
+    // 各メッセージハンドラに振り分ける
+    switch (data.type) {
+      case "SERVER_HELLO":
+        wsHelloHandler(data);
+        break;
+      case "GPS_UPDATE":
+        wsGpsUpdateHandler(data);
+        break;
+      default:
+        log("warn", "不明なWebSocketメッセージを受信しました．\n" + _data);
+        location.reload()
     }
   });
 } catch{
