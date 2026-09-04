@@ -268,14 +268,6 @@ class ObdClient:
             f"VIN not found in response: {data.hex(' ')}"
         )
 
-    def get_supported(self):
-        pid = 0x80
-        data = self.request(
-            service=0x01,
-            pid=pid,
-        )
-        print(pid,"\t",data.hex(" "))
-
 
 # ============================================================
 # Application
