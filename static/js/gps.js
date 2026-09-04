@@ -27,7 +27,7 @@ function log(level,text) {
       prefix = "[UNKNOWN]";
       console.log(`${timestamp} ${prefix} ${text}`);
   }
-  log.textContent += `${timestamp} ${prefix} ${text}\n`;
+  log.textContent = `${timestamp} ${prefix} ${text}\n` + log.textContent;
 }
 
 
