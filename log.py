@@ -1,7 +1,7 @@
 import threading,time
 import datetime
 
-class CanLogger:
+class Logger:
 
     def __init__(self,**kwargs):
         '''
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     """
     デバッグ用にコマンドから実行された場合のみ自力でワーカーを動かす
     """
-    cl = CanLogger()
+    cl = Logger()
     cl.run()
     time.sleep(10)
     cl.event.set()

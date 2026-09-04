@@ -2,7 +2,7 @@ from flask import Flask
 from flask_socketio import SocketIO
 import json
 import gps
-import can
+import log
 
 app = Flask(__name__)
 sock = SocketIO(app)
@@ -37,7 +37,7 @@ def handle_message(_msg):
 
 if __name__ == '__main__':
     print(app.url_map)
-    cl = can.CanLogger()
+    cl = log.Logger()
     cl.run()
     app.run()
     cl.event.set()
