@@ -109,7 +109,7 @@ function wsGpsUpdateHandler(data) {
 const sock = io();
 var wsConnected = false;
 try {
-  sock.send('{"type": "CLIENT HELLO"}');
+  sock.send('{"type": "CLIENT_HELLO"}');
   sock.on("message", function (_data) {
     const data = JSON.parse(_data);
 
@@ -121,9 +121,10 @@ try {
       case "GPS_UPDATE":
         wsGpsUpdateHandler(data);
         break;
+      case "CAN_DATA":
+        break;
       default:
         log("warn", "不明なWebSocketメッセージを受信しました．\n" + _data);
-        location.reload()
     }
   });
 } catch{

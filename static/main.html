@@ -1,0 +1,322 @@
+<HTML>
+  <head>
+    <title>CAN情報表示ウィンドウ</title>
+    <script src="./js/socket.io.js"></script>
+  </head>
+  <body bgcolor="#abc">
+    <h1>CAN情報</h1>
+
+    <!-- 現在の状態 -->
+    <h2>現在の状態</h2>
+    <table bgcolor="#cccccc" border="1" width="99%">
+      <thead>
+        <tr>
+          <th>PID</th>
+          <th>項目</th>
+          <th>現在値</th>
+          <th>単位</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0x04</td>
+          <td>発動機負荷</td>
+          <td id="x04">-</td>
+          <td>%</td>
+        </tr>
+        <tr>
+          <td>0x05</td>
+          <td>冷却水温</td>
+          <td id="x05">-</td>
+          <td>°C</td>
+        </tr>
+        <tr>
+          <td>0x0C</td>
+          <td>発動機回転数</td>
+          <td id="x0C">-</td>
+          <td>rpm</td>
+        </tr>
+        <tr>
+          <td>0x0D</td>
+          <td>車速</td>
+          <td id="x0D">-</td>
+          <td>km/h</td>
+        </tr>
+        <tr>
+          <td>0x0F</td>
+          <td>吸気温度</td>
+          <td id="x0F">-</td>
+          <td>°C</td>
+        </tr>
+        <tr>
+          <td>0x10</td>
+          <td>空気流量</td>
+          <td id="x10">-</td>
+          <td>g/s</td>
+        </tr>
+        <tr>
+          <td>0x43</td>
+          <td>絶対負荷</td>
+          <td id="x43">-</td>
+          <td>%</td>
+        </tr>
+        <tr>
+          <td>0x44</td>
+          <td>空燃比等量比指令</td>
+          <td id="x44">-</td>
+          <td>λ</td>
+        </tr>
+        <tr>
+          <td>0x49</td>
+          <td>スロットル位置</td>
+          <td id="x49">-</td>
+          <td>%</td>
+        </tr>
+        <tr>
+          <td>0x4C</td>
+          <td>スロットル動作指令</td>
+          <td id="x4C">-</td>
+          <td>%</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <div id="meters1" style="display:flex;width:99%;height:calc(50vh - 240px);">
+
+        <div class="meter" id="meter_04" style="width:calc(95% / 5); height:calc(95%); border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>発動機負荷</center>
+        </div>
+
+        <div class="meter" id="meter_05" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>冷却水温</center>
+        </div>
+
+        <div class="meter" id="meter_0C" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>発動機回転数</center>
+        </div>
+
+        <div class="meter" id="meter_0D" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>車速</center>
+        </div>
+
+        <div class="meter" id="meter_0F" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>吸気温度</center>
+        </div>
+    </div>
+
+
+    <div id="meters2" style="display:flex;width:99%;height:calc(50vh - 240px);">
+        <div class="meter" id="meter_10" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>空気流量</center>
+        </div>
+
+        <div class="meter" id="meter_43" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>絶対負荷</center>
+        </div>
+
+        <div class="meter" id="meter_44" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>空燃比等量比指令</center>
+        </div>
+
+        <div class="meter" id="meter_49" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>スロットル位置</center>
+        </div>
+
+        <div class="meter" id="meter_4C" style="width:calc(95% / 5);height:calc(95%);border-width: 2px; border-style: outset; background-color: #eee;">
+            <svg viewBox="0 0 260 160">
+                <g class="needle" >
+                    <line x1="130" y1="130" x2="130" y2="35" stroke="#222" stroke-width="3" stroke-linecap="round" />
+                    <circle cx="130" cy="130" r="5" fill="#222" />
+                </g>
+                <text x="40" y="145" text-anchor="middle" class="meter-min">0</text>
+                <text x="220" y="145" text-anchor="middle" class="meter-max">100</text>
+                <text x="130" y="150" text-anchor="middle" class="meter-unit">%</text>
+            </svg>
+            <center>スロットル動作指令</center>
+        </div>
+
+    </div>
+
+    <!-- 現在の状態 -->
+
+    <script src="./js/main.js"></script>
+    <script>
+        class AnalogMeter {
+            constructor(element, options = {}) {
+                this.element = element;
+                this.needle = element.querySelector(".needle");
+
+                this.min = options.min ?? 0;
+                this.max = options.max ?? 100;
+                this.unit = options.unit ?? "";
+
+                this.value = this.min;
+
+                this.element.querySelector(".meter-min").textContent = this.min;
+                this.element.querySelector(".meter-max").textContent = this.max;
+                this.element.querySelector(".meter-unit").textContent = this.unit;
+
+                this.setValue(this.min);
+            }
+
+            setValue(value) {
+                value = Number(value);
+
+                if (!Number.isFinite(value)) {
+                    return;
+                }
+
+                // 範囲制限
+                value = Math.max(this.min, Math.min(this.max, value));
+
+                this.value = value;
+
+                // -90° ～ +90° に変換
+                const ratio = (value - this.min) / (this.max - this.min);
+                const angle = -90 + ratio * 180;
+
+                this.needle.style.transformOrigin = "50% 82%"
+                this.needle.style.transform = `rotate(${angle}deg)`;
+            }
+
+            getValue() {
+                return this.value;
+            }
+        }
+
+        // メーター生成
+        const meter_04 = new AnalogMeter(document.getElementById("meter_04"), {
+            min: 0,
+            max: 100,
+            unit: "%",
+        });
+        const meter_05 = new AnalogMeter(document.getElementById("meter_05"), {
+            min: -40,
+            max: 215,
+            unit: "℃",
+        });
+        const meter_0C = new AnalogMeter(document.getElementById("meter_0C"), {
+            min: 0,
+            max: 10000,
+            unit: "rpm",
+        });
+        const meter_0D = new AnalogMeter(document.getElementById("meter_0D"), {
+            min: 0,
+            max: 255,
+            unit: "km/h",
+        });
+        const meter_0F = new AnalogMeter(document.getElementById("meter_0F"), {
+            min: -40,
+            max: 215,
+            unit: "℃",
+        });
+        const meter_10 = new AnalogMeter(document.getElementById("meter_10"), {
+            min: 0,
+            max: 655.35,
+            unit: "g/s",
+        });
+        const meter_43 = new AnalogMeter(document.getElementById("meter_43"), {
+          min: 0,
+          max: 100,
+          unit: "%",
+        });
+        const meter_44 = new AnalogMeter(document.getElementById("meter_44"), {
+            min: 0,
+            max: 2,
+            unit: "λ",
+        });
+        const meter_49 = new AnalogMeter(document.getElementById("meter_49"), {
+            min: 0,
+            max: 100,
+            unit: "%",
+        });
+        const meter_4C = new AnalogMeter(document.getElementById("meter_4C"), {
+            min: 0,
+            max: 100,
+            unit: "%",
+        });
+
+    </script>
+  </body>
+</HTML>
