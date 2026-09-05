@@ -167,7 +167,7 @@ class IsoTpTransport:
             raise RuntimeError("ISO-TPスタックの開設に失敗しました")
 
         self.stack.send(payload)
-        print("ISOTP ↑\t",payload.hex(" "))
+        #print("ISOTP ↑\t",payload.hex(" "))
 
         deadline = __import__("time").monotonic() + timeout
 
@@ -178,7 +178,7 @@ class IsoTpTransport:
                 res = self.stack.recv()
                 if res == None:
                     raise IsotpError("ISO-TPで正常な応答を受信できませんでした")
-                print("ISOTP ↓\t",bytes(res).hex(" "))
+                #print("ISOTP ↓\t",bytes(res).hex(" "))
                 return bytes(res)
 
             __import__("time").sleep(0.001)
@@ -227,13 +227,13 @@ class ObdClient:
             0x0d: lambda d: int(d[0]), # 車速(km/h)
             0x0F: lambda d: int(d[0]) - 40, # 吸気温度(C)
             0x10: lambda d: (256 * int(d[0]) + int(d[1])) / 100, # 空気流量(g)
-            0x2F: lambda d: int(d[0]) / 2.55, # 燃料残量(%)
+            #0x2F: lambda d: int(d[0]) / 2.55, # 燃料残量(%)
             0x43: lambda d: ( 256 * int(d[0]) + int(d[1]) ) / 2.55, # 絶対負荷(%)
             0x44: lambda d: (256 * int(d[0]) + int(d[0])) / 32768, # 空燃比等量比指令(λ)
-            0x46: lambda d: int(d[0]) - 40, # 外気温(C)
-            0x48: lambda d: int(d[0]) / 2.55, # スロットル位置C(%)
+            #0x46: lambda d: int(d[0]) - 40, # 外気温(C)
+            #0x48: lambda d: int(d[0]) / 2.55, # スロットル位置C(%)
             0x49: lambda d: int(d[0]) / 2.55, # スロットル位置D(%)
-            0x4B: lambda d: int(d[0]) / 2.55, # スロットル位置F(%)
+            #0x4B: lambda d: int(d[0]) / 2.55, # スロットル位置F(%)
             0x4C: lambda d: int(d[0]) / 2.55, # スロットルアクチュエーター指令(%)
         }
         self.supported_pids = self.dec_fomula.keys()
@@ -348,7 +348,7 @@ def main() -> None:
 
     can_transport = CanTransport(
         CanConfig(
-            port="COM4",
+            port="COM6",
             bitrate=500000,
         )
     )
