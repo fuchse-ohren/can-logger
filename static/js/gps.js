@@ -71,7 +71,7 @@ function updateSuccess(obj) {
 
   // バックエンドに位置情報を送信
   sock.send(JSON.stringify({
-    "type": "GPS UPDATE",
+    "type": "GPS_UPDATE",
     "latitude": obj.coords.latitude,
     "longitude": obj.coords.longitude,
     "accuracy": obj.coords.accuracy
