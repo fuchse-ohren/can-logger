@@ -126,35 +126,34 @@ class Logger:
         ワーカーを別スレッドとして起動し、CANデータと位置情報をCSVに記録する.
         """
 
-        while self.event.is_set() == False:
-            self.isleep(0.2)
+        with open(self.output_path,"a") as fp:
+            while self.event.is_set() == False:
+                self.isleep(0.2)
 
-            # 現在時刻
-            now = datetime.datetime.now().isoformat()
+                # 現在時刻
+                now = datetime.datetime.now().isoformat()
 
-            # OBDの値を取得
-            can_outtext = "";
-            for pid in self.obd.supported_pids:
-                try:
-                    res_bin = self.obd.request(0x01,pid)
-                    res = self.obd.decoder(pid, res_bin)
-                    self.can_data[pid] = res
-                    can_outtext += str(res) + ","
-                except Exception as e:
-                    can_outtext += ","
-                    self.can_data[pid] = 0.0
-                    lprint.error(e)
+                # OBDの値を取得
+                can_outtext = "";
+                for pid in self.obd.supported_pids:
+                    try:
+                        res_bin = self.obd.request(0x01,pid)
+                        res = self.obd.decoder(pid, res_bin)
+                        self.can_data[pid] = res
+                        can_outtext += str(res) + ","
+                    except Exception as e:
+                        can_outtext += ","
+                        self.can_data[pid] = 0.0
+                        lprint.error(e)
 
-
-            # ファイルに書き込み
-            with open(self.output_path,"a") as fp:
+                # ファイルに書き込み
                 buff = now + "," \
                 + str(self.lat) + "," \
                 + str(self.long) + "," \
                 + str(self.acc) + "," \
                 + can_outtext +  "\n"
                 fp.write(buff)
-
+                fp.flush()
 
 
 #if __name__ == '__main__':
