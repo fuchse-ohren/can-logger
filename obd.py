@@ -1,13 +1,24 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from poplib import POP3_SSL_PORT
 from typing import Optional
 
 import can
 import isotp
 import time
+import logging
 
+# ============================================================
+#  ログ設定
+# ============================================================
+LOG_FORMAT = "%(asctime)s,%(msecs)03d [%(levelname)s] %(name)s - %(message)s"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+logging.basicConfig(
+    level=logging.INFO,
+    format=LOG_FORMAT,
+    datefmt=DATE_FORMAT
+)
+lprint = logging.getLogger(__name__)
 
 # ============================================================
 # CAN Layer
@@ -146,8 +157,8 @@ class IsoTpTransport:
             "blocksize": self.config.blocksize,
             "wftmax": self.config.wftmax,
             "tx_data_length": self.config.tx_data_length,
-            "rx_flowcontrol_timeout": 100,
-            "rx_consecutive_frame_timeout": 100,
+            "rx_flowcontrol_timeout": 5,
+            "rx_consecutive_frame_timeout": 5,
             "tx_padding": 0x00
         }
 
@@ -160,14 +171,14 @@ class IsoTpTransport:
     def send_and_receive(
         self,
         payload: bytes,
-        timeout: float = 0.5,
+        timeout: float = 0.01, # 10 ms
     ) -> bytes:
 
         if self.stack is None:
             raise RuntimeError("ISO-TPスタックの開設に失敗しました")
 
         self.stack.send(payload)
-        #print("ISOTP ↑\t",payload.hex(" "))
+        lprint.debug(f"ISOTP ↑\t{payload.hex(' ')}")
 
         deadline = __import__("time").monotonic() + timeout
 
@@ -178,10 +189,10 @@ class IsoTpTransport:
                 res = self.stack.recv()
                 if res == None:
                     raise IsotpError("ISO-TPで正常な応答を受信できませんでした")
-                #print("ISOTP ↓\t",bytes(res).hex(" "))
+                lprint.debug(f"ISOTP ↓\t{bytes(res).hex(' ')}")
                 return bytes(res)
 
-            __import__("time").sleep(0.001)
+            __import__("time").sleep(0.001) # 1ms
 
         raise TimeoutError("ISO-TP応答がタイムアウトしました")
 
@@ -348,7 +359,7 @@ def main() -> None:
 
     can_transport = CanTransport(
         CanConfig(
-            port="COM6",
+            port="COM4",
             bitrate=500000,
         )
     )
@@ -383,12 +394,12 @@ def main() -> None:
             for pid in obd.supported_pids:
                 res_bin = obd.request(0x01,pid)
                 res = obd.decoder(pid,res_bin)
-                print("pid:",pid,"\tres:",res)
+                lprint.info(f"pid: {pid}\tres: {res}")
         except KeyboardInterrupt as e:
             can_transport.close()
             return
         except Exception as e:
-            print(e)
+            lprint.error(e)
             pass
 
 

@@ -4,17 +4,17 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="./js/socket.io.js"></script>
   </head>
-  <body>
+  <body bgcolor="#abc">
     <h1>GPS情報</h1>
 
     <!-- GPS取得ログ -->
-    <div id="logwrapper" style="width:100%">
-        <textarea rows="10" id="log" style="width: 100%;font-size: 10px"></textarea>
-    </div>
+    <h4>ログ</h4>
+        <textarea rows="10" id="log" style="width: 100%;height: calc(50vh - 100px);font-size: 10px;background-color: black;color:greenyellow;"></textarea>
     <!-- GPS取得ログ -->
     <br>
     <!-- 地図 -->
-    <div id="map" style="width:100%; height: 320px;"></div>
+    <h4>地図</h4>
+    <div id="map" style="width:100%; height: calc(50vh - 100px)"></div>
     <!-- 地図 -->
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
