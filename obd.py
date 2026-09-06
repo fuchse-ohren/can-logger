@@ -224,7 +224,7 @@ class ObdClient:
             0x04: lambda d: int(d[0]) / 2.55, # 発動機負荷(%)
             0x05: lambda d: int(d[0]) - 40, # 冷却水温(C)
             0x0C: lambda d: (256 * int(d[0]) + int(d[1])) / 4, # 発動機回転数(rpm)
-            0x0d: lambda d: int(d[0]), # 車速(km/h)
+            0x0D: lambda d: int(d[0]), # 車速(km/h)
             0x0F: lambda d: int(d[0]) - 40, # 吸気温度(C)
             0x10: lambda d: (256 * int(d[0]) + int(d[1])) / 100, # 空気流量(g)
             #0x2F: lambda d: int(d[0]) / 2.55, # 燃料残量(%)
