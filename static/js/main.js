@@ -84,7 +84,7 @@ try {
 
 // CAN情報を要求する
 setInterval(
-  function(){ sock.send('{"type":"CAN_DATA"}') }, 1000
+  function(){ sock.send('{"type":"CAN_DATA"}') }, 200
 );
 
 

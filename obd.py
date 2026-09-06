@@ -157,8 +157,8 @@ class IsoTpTransport:
             "blocksize": self.config.blocksize,
             "wftmax": self.config.wftmax,
             "tx_data_length": self.config.tx_data_length,
-            "rx_flowcontrol_timeout": 5,
-            "rx_consecutive_frame_timeout": 5,
+            "rx_flowcontrol_timeout": 10,
+            "rx_consecutive_frame_timeout": 10,
             "tx_padding": 0x00
         }
 
@@ -171,7 +171,7 @@ class IsoTpTransport:
     def send_and_receive(
         self,
         payload: bytes,
-        timeout: float = 0.01, # 10 ms
+        timeout: float = 0.02, # 20 ms
     ) -> bytes:
 
         if self.stack is None:

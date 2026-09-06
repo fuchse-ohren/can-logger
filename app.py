@@ -61,7 +61,7 @@ def handle_message(_msg):
 
 if __name__ == '__main__':
     lprint.info(app.url_map)
-    cl = log.Logger(port="COM4")
+    cl = log.Logger(port="COM6")
     cl.run()
     app.run()
 

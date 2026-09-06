@@ -127,7 +127,7 @@ class Logger:
         """
 
         while self.event.is_set() == False:
-            self.isleep(0.1)
+            self.isleep(0.2)
 
             # 現在時刻
             now = datetime.datetime.now().isoformat()
@@ -139,7 +139,7 @@ class Logger:
                     res_bin = self.obd.request(0x01,pid)
                     res = self.obd.decoder(pid, res_bin)
                     self.can_data[pid] = res
-                    can_outtext += res + ","
+                    can_outtext += str(res) + ","
                 except Exception as e:
                     can_outtext += ","
                     self.can_data[pid] = 0.0
