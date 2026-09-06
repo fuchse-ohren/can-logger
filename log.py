@@ -142,6 +142,7 @@ class Logger:
                     can_outtext += res + ","
                 except Exception as e:
                     can_outtext += ","
+                    self.can_data[pid] = 0.0
                     lprint.error(e)
 
 

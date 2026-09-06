@@ -15,7 +15,39 @@ function wsHelloHandler(data) {
  **/
 function wsCANHandler(data) {
   console.log("info", "CANデータ受信")
-  console.log(data)
+  const can_data = data.message
+  const eg_load = can_data[4] ?? 0;
+  const water_temp = can_data[5] ?? 0;
+  const eg_rpm = can_data[12] ?? 0;
+  const speed = can_data[13] ?? 0;
+  const air_temp = can_data[15] ?? 0;
+  const air_flow = can_data[16] ?? 0;
+  const sys_load = can_data[67] ?? 0;
+  const lambda = can_data[68] ?? 0;
+  const throttle = can_data[73] ?? 0;
+  const throttle_acc = can_data[76] ?? 0;
+
+  document.getElementById("x04").textContent = eg_load;
+  meter_04.setValue(eg_load);
+  document.getElementById("x05").textContent = water_temp;
+  meter_05.setValue(water_temp);
+  document.getElementById("x0C").textContent = eg_rpm;
+  meter_0C.setValue(eg_rpm);
+  document.getElementById("x0D").textContent = speed;
+  meter_0D.setValue(speed);
+  document.getElementById("x0F").textContent = air_temp;
+  meter_0F.setValue(air_temp);
+  document.getElementById("x10").textContent = air_flow;
+  meter_10.setValue(air_flow);
+  document.getElementById("x43").textContent = sys_load;
+  meter_43.setValue(sys_load);
+  document.getElementById("x44").textContent = lambda;
+  meter_44.setValue(lambda);
+  document.getElementById("x49").textContent = throttle;
+  meter_49.setValue(throttle);
+  document.getElementById("x4C").textContent = throttle_acc;
+  meter_4C.setValue(throttle_acc);
+
 }
 
 
